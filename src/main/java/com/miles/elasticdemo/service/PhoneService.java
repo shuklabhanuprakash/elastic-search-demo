@@ -1,6 +1,7 @@
 package com.miles.elasticdemo.service;
 
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.elasticsearch.action.search.SearchResponse;
 
@@ -14,6 +15,6 @@ public interface PhoneService {
 
 	SearchResponse findAll();
 
-	   
+	SearchResponse findAny(Map<String,Object> map);
 	
 }

@@ -1,6 +1,7 @@
 package com.miles.elasticdemo.service.impl;
 
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.elasticsearch.action.search.SearchResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,11 @@ public class PhoneServiceImpl implements PhoneService {
 	@Override
 	public SearchResponse findAll() {
 		return phoneRepository.findAll();
+	}
+
+	@Override
+	public SearchResponse findAny(Map<String,Object> map) {
+		return phoneRepository.findAny(map);
 	}
 
 	

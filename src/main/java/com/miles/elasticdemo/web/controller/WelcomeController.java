@@ -1,6 +1,11 @@
 package com.miles.elasticdemo.web.controller;
 
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
+
+import org.elasticsearch.action.search.SearchResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,6 +50,15 @@ public class WelcomeController {
 	@GetMapping("/allPhones")
 	public ResponseEntity findAll() {
 		return ResponseEntity.ok(phoneService.findAll());
+	}
+	
+	@PostMapping("/findAny")
+	public ResponseEntity findAny(@RequestBody Map<String,Object> map) {
+		
+		
+		return ResponseEntity.ok(phoneService.findAny(map));
+
+
 	}
 	
 }

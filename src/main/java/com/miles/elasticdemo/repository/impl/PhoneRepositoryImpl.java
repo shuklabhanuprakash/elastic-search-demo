@@ -1,8 +1,13 @@
 package com.miles.elasticdemo.repository.impl;
 
+import static org.assertj.core.api.Assertions.entry;
+
 import java.io.IOException;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.get.GetRequest;
@@ -27,12 +32,10 @@ public class PhoneRepositoryImpl  {
 	  private final String TYPE = "product";  
 	  private RestHighLevelClient restHighLevelClient;
 	  private ObjectMapper objectMapper;
-	  private RestTemplate restTemplate;
 
 	  public PhoneRepositoryImpl( RestHighLevelClient restHighLevelClient) {
 	    this.objectMapper = new ObjectMapper();
 	    this.restHighLevelClient = restHighLevelClient;
-	    restTemplate= new RestTemplate();
 	  }
 	  
 	  public Phone save(Phone phone) {
@@ -78,6 +81,32 @@ public class PhoneRepositoryImpl  {
 		}
 		  return searchResponse;
 	  }
+	  
+	  public SearchResponse findAny(Map<String,Object> map){
+		  String key = null;
+		  Object value =null;
+		  
+		  for(Map.Entry<String, Object> entry: map.entrySet()) {
+			  key = entry.getKey();
+			  value=entry.getValue();
+			  
+		  }
+		  
+		  SearchResponse searchResponse = null;
+		  SearchRequest searchRequest = new SearchRequest(); 
+		  SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder(); 
+		  searchSourceBuilder.query(QueryBuilders.matchQuery(key,value));
+		  searchRequest.source(searchSourceBuilder);
+		  try {
+			  searchResponse = restHighLevelClient.search(searchRequest);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		  return searchResponse;
+	  }
+	  
+	  
 	  
 	 
 }
