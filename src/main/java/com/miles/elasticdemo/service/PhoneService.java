@@ -15,6 +15,8 @@ public interface PhoneService {
 
 	SearchResponse findAll();
 
-	SearchResponse findAny(Map<String,Object> map);
+	String findAny(String map);
+	
+	SearchResponse findByParameter(Map<String,Object> map);
 	
 }

@@ -52,13 +52,22 @@ public class WelcomeController {
 		return ResponseEntity.ok(phoneService.findAll());
 	}
 	
-	@PostMapping("/findAny")
+	@PostMapping("/findByParameter")
 	public ResponseEntity findAny(@RequestBody Map<String,Object> map) {
 		
 		
-		return ResponseEntity.ok(phoneService.findAny(map));
+		return ResponseEntity.ok(phoneService.findByParameter(map));
 
 
 	}
 	
+	
+	@GetMapping("/findAny/{param}")
+	public ResponseEntity findAny(@PathVariable String param) {
+		
+		
+		return ResponseEntity.ok(phoneService.findAny(param));
+
+
+	}
 }

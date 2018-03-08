@@ -33,8 +33,13 @@ public class PhoneServiceImpl implements PhoneService {
 	}
 
 	@Override
-	public SearchResponse findAny(Map<String,Object> map) {
-		return phoneRepository.findAny(map);
+	public SearchResponse findByParameter(Map<String,Object> map) {
+		return phoneRepository.findByParameter(map);
+	}
+
+	@Override
+	public String findAny(String param) {
+		return phoneRepository.findAny(param);
 	}
 
 	

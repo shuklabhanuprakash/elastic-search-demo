@@ -3,12 +3,8 @@ package com.miles.elasticdemo.repository.impl;
 import static org.assertj.core.api.Assertions.entry;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
@@ -19,6 +15,11 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.junit.runners.Parameterized;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
@@ -32,10 +33,19 @@ public class PhoneRepositoryImpl  {
 	  private final String TYPE = "product";  
 	  private RestHighLevelClient restHighLevelClient;
 	  private ObjectMapper objectMapper;
-
+	  private RestTemplate restTemplate;
+	
+	  @Value("${elasticsearch.host}")
+	  private String host;
+	    
+	  @Value("${elasticsearch.port}")
+      private Integer port;
+	  
+	  
 	  public PhoneRepositoryImpl( RestHighLevelClient restHighLevelClient) {
 	    this.objectMapper = new ObjectMapper();
 	    this.restHighLevelClient = restHighLevelClient;
+	    this.restTemplate = new RestTemplate();
 	  }
 	  
 	  public Phone save(Phone phone) {
@@ -82,7 +92,7 @@ public class PhoneRepositoryImpl  {
 		  return searchResponse;
 	  }
 	  
-	  public SearchResponse findAny(Map<String,Object> map){
+	  public SearchResponse findByParameter(Map<String,Object> map){
 		  String key = null;
 		  Object value =null;
 		  
@@ -105,6 +115,20 @@ public class PhoneRepositoryImpl  {
 		}
 		  return searchResponse;
 	  }
+
+	public String findAny(String param) {
+		URI url;//"http://localhost:9200/ecommerce/product/_search?q="+param
+		String serviceUrl = "http://"+host+":"+port;
+		try {
+			url = new URI(serviceUrl + "/ecommerce/product/_search?q="+param);
+		ResponseEntity<String> exchange = restTemplate.exchange(url, HttpMethod.GET,null,String.class);
+		return exchange.getBody();
+		}catch(Exception e) {
+			System.out.println(e);
+		}
+		return null;
+		
+	}
 	  
 	  
 	  
